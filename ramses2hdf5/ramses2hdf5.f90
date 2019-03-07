@@ -48,9 +48,9 @@ program ramses2hdf5
   integer, parameter :: dp = kind(1.d0)
 
   ! for which output case to work
-  logical :: dmo      = .false.   ! use DM particles only
+  logical :: dmo      = .true.   ! use DM particles only
   logical :: gadget   = .false.   ! create gadget compatible file
-  logical :: galaxies = .false.   ! use galaxies and orphans from mergertree patch
+  logical :: galaxies = .true.   ! use galaxies and orphans from mergertree patch
   logical :: swift    = .false.   ! create swift compatible file
   logical :: varmass  = .false.   ! assume variable DM particle masses
 
@@ -403,10 +403,19 @@ contains
 
     integer :: junk, nparts_temp
 
+    logical :: exists
+
     call title(int(cpu), ids)
     call title(snapshot, sns)
 
     fname = TRIM(sourcedir)//'/part_'//TRIM(sns)//'.out'//TRIM(ids)
+    write(*,*) "Working on file ", fname 
+    inquire(file=fname, exist=exists)
+    if (.not.exists) then
+      write(*,*) "Can't find file ", fname
+      write(*,*) "exiting"
+      stop
+    endif
 
     open(666, file=fname, form='unformatted')
     read(666) junk
@@ -464,6 +473,7 @@ contains
     call title(snapshot, sns)
 
     fname = TRIM(sourcedir)//'/galaxies_'//TRIM(sns)//'.txt'//TRIM(ids)
+    write(*,*) "Working on file ", fname 
 
     ngals_tot = 0
 
@@ -751,11 +761,11 @@ contains
 
         if(sourcedir(strlen:strlen)=='/') then
           infofile = TRIM(sourcedir)//'info_'//sourcedir(strlen-5:strlen-1)//'.txt'
-          outputfile = TRIM(sourcedir)//'output-'//TRIM(ftype)//'_'//sourcedir(strlen-5:strlen-1)//'.h5'
+          outputfile = TRIM(sourcedir)//'output-'//TRIM(ftype)//'_'//sourcedir(strlen-5:strlen-1)//'.hdf5'
           read(sourcedir(strlen-5:strlen-1), '(I5)') snapshot
         else
           infofile = TRIM(sourcedir)//'/info_'//sourcedir(strlen-4:strlen)//'.txt'
-          outputfile = TRIM(sourcedir)//'/output-'//TRIM(ftype)//'_'//sourcedir(strlen-4:strlen)//'.h5'
+          outputfile = TRIM(sourcedir)//'/output-'//TRIM(ftype)//'_'//sourcedir(strlen-4:strlen)//'.hdf5'
           read(sourcedir(strlen-4:strlen), '(I5)') snapshot
         endif
         inquire(file=TRIM(infofile), exist=infofile_ex)
