@@ -173,7 +173,7 @@ contains
 
     ! Modify dataset creation properties, i.e. enable chunking
     call h5pcreate_f(H5P_DATASET_CREATE_F, crp_list, error)
-    chunk_dims = (/rows, columns/)
+    chunk_dims = (/rows, 10000*columns/)
     call h5pset_chunk_f(crp_list, rank, chunk_dims, error)
 
     ! Create a dataset in group with default properties.
@@ -324,7 +324,7 @@ contains
 
     ! Modify dataset creation properties, i.e. enable chunking
     call h5pcreate_f(H5P_DATASET_CREATE_F, crp_list, error)
-    chunk_dims = (/rows, columns/)
+    chunk_dims = (/rows, 100000*columns/)
     call h5pset_chunk_f(crp_list, rank, chunk_dims, error)
 
     ! Create a dataset in group with default properties.
