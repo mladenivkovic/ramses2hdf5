@@ -4,3 +4,5 @@ Logs/
 *.nav
 *.synctex.gz
 *.o
+*.pyc
+**/__pycache__
