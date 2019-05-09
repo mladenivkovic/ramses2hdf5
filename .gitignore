@@ -6,3 +6,4 @@ Logs/
 *.o
 *.pyc
 **/__pycache__
+glossar-latex
