@@ -13,3 +13,5 @@ Logs/
 **/__pycache__
 glossar-latex
 compile_commands.json
+ramses2hdf5
+
